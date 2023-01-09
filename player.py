@@ -4,13 +4,13 @@ import pygame
 
 class Player:
 	def __init__(self) -> None:
-		self.x, self.y = 3, 3
-
+		self.x, self.y = 1.5, 1.5
 		self.movement_speed = 2.0
 		self.rotation_speed = 0.0005
 		self.angle = 0
-	
-	# movement function
+
+		self.shooting_state = False
+
 	def move(self, fps: float) -> None:
 		mouse_pressed = pygame.mouse.get_pressed()
 		if mouse_pressed[2]:
@@ -24,7 +24,11 @@ class Player:
 			if not (map[int(x - 0.1)][int(self.y)] or map[int(x + 0.1)][int(self.y)] or map[int(x)][int(self.y - 0.1)] or map[int(x)][int(self.y + 0.1)]):
 				self.x = x
 
-	# rotation function
+	def shoot(self) -> None:
+		mouse_pressed = pygame.mouse.get_pressed()
+		if mouse_pressed[0]:
+			self.shooting_state = True
+
 	def rotate(self, screen: pygame.surface.Surface) -> None:
 		mouse_pos = pygame.mouse.get_pos()
 		if screen.get_rect().collidepoint(mouse_pos):
@@ -36,4 +40,5 @@ class Player:
 
 	def update(self, screen: pygame.surface.Surface, fps: float) -> None:
 		self.move(fps)
+		self.shoot()
 		self.rotate(screen)

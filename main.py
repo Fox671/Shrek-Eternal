@@ -13,7 +13,7 @@ pygame.mouse.set_visible(False)
 screen = pygame.display.set_mode(RES, pygame.FULLSCREEN, vsync=True)
 clock = pygame.time.Clock()
 
-enemies = [Enemy() for _ in range(ENEMIES)]
+enemies = numpy.array([Enemy() for _ in range(ENEMIES)])
 player = Player()
 
 wall_textures = numpy.array([
@@ -30,8 +30,7 @@ enemy_textures = numpy.array([
 
 try:
 	sound = pygame.mixer.Sound("assets/allstar.mp3")
-	sound.set_volume(0.4)
-	# sound.play(loops = True)
+	sound.play(loops = True)
 except pygame.error:
 	pass
 
@@ -46,8 +45,9 @@ while True:
 	if fps != 0:
 		player.update(screen, fps)
 		[enemy.update(fps) for enemy in enemies]
-
-		display(player.x, player.y, player.angle, numpy.array([enemy.x for enemy in enemies]), numpy.array([enemy.y for enemy in enemies]), numpy.array([enemy.index for enemy in enemies]), wall_textures, enemy_textures, map, screen)
+		
+		screen.fill((0, 0, 0))
+		enemies = display(player, enemies, wall_textures, enemy_textures, map, screen)
 
 	pygame.display.update()
 	clock.tick(FPS)
